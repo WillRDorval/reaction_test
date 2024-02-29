@@ -203,15 +203,15 @@ fn react(key_in: Res<Input<KeyCode>>,
                     }
                 },
                 _ => {
-                    for (mut text, tc) in &mut t {
+                    for (mut text, tc) in &mut t { //updating display for debug, remove this later
                         if tc.0 == 1 {
-                            text.sections[0].value = format!("{} us", watch.0.elapsed().as_micros()).to_owned();
+                            text.sections[0].value = format!("{} us\n{} us", watch.0.elapsed().as_micros(), time.delta().as_micros()).to_owned();
                         }
                     }
-                    if key_in.just_pressed(KeyCode::Space){
+                    if key_in.just_pressed(KeyCode::Space){ //reset time counter if space is pressed early
                         watch.0 = Instant::now();
                     }
-                    if watch.0.elapsed().as_micros() >= (-1*ctrial.time).try_into().unwrap(){
+                    if watch.0.elapsed().as_micros() >= (-1*ctrial.time).try_into().unwrap(){ //after randomized delay change screen colour
                         let mut cbg: Mut<'_, BackgroundColor> = bg.iter_mut().filter(|(_, tc)| tc.0==2).map(|(bg, _)| bg).next().unwrap();
                         cbg.0 = end_colour(ctrial.dir, stat.atype);
                         ctrial.time = 1; 
